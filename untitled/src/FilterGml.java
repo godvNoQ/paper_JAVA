@@ -1,10 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FilterGml {
     public List<Node> nodes = new ArrayList<>();
     public List<Edge> edges = new ArrayList<>();
+    public HashMap<String,Edge> edgeHashMap = new HashMap<>();
     private String path;
     public FilterGml(String path){
         this.path = path;
@@ -38,7 +40,9 @@ public class FilterGml {
                     edge.setSource(Integer.parseInt(str.substring(11)));
                     str =bufferedReader.readLine();
                     edge.setTarget(Integer.parseInt(str.substring(11)));
+                    if(!edgeHashMap.containsKey(edge.getSource()+","+edge.getTarget())){
                     edges.add(edge);
+                    edgeHashMap.put(edge.getSource()+","+edge.getTarget(),edge);}
 //                    System.out.println("source:"+edge.getSource()+"\t"+"target:"+edge.getTarget());
                 }
 
@@ -115,10 +119,12 @@ public class FilterGml {
                 Edge edge = tmpEdge.get(i);
                 if (edge.getTarget() == id) {
                     edges.remove(edge);
+                    edgeHashMap.remove(edge.getSource()+","+edge.getTarget());
                 }
                 if (edge.getSource() == id) {
                     sourceEdge.add(edge);
                     edges.remove(edge);
+                    edgeHashMap.remove(edge.getSource()+","+edge.getTarget());
                 }
             }
 
@@ -128,7 +134,9 @@ public class FilterGml {
                         Edge edge = new Edge();
                         edge.setSource(sourceEdge.get(i).getSource());
                         edge.setTarget(targetEdge.get(j).getTarget());
-                        edges.add(edge);
+                        if(!edgeHashMap.containsKey(edge.getSource()+","+edge.getTarget())){
+                            edges.add(edge);
+                            edgeHashMap.put(edge.getSource()+","+edge.getTarget(),edge);}
                     }
                 }
 
@@ -136,26 +144,26 @@ public class FilterGml {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        String path = "D:\\data\\ml\\00ceaa5f8f9be7a9ce5ffe96b5b6fb2e7e73ad87c2f023db9fa399c40ac59b62.zip.gml";
-        FilterGml f = new FilterGml(path);
-        f.readGraph();
-        List<Node> nodes = f.nodes;
-        List<Edge> edges = f.edges;
-        System.out.println(edges.size());
-        System.out.println(nodes.size());
-        List<Node> tmpNode = new ArrayList<>();
-        tmpNode.addAll(nodes);
-        for(int i = 0;i<tmpNode.size();i++){
-            Node node = tmpNode.get(i);
-            String lable = node.getLabel();
-            String[] tmps =lable.split("->");
-            if(!tmps[0].contains("Ljava")&&!tmps[0].contains("Landroid")){
-                f.removeNode(node);
-            }
-        }
-        f.writeGraph("C:\\Users\\BLG\\Desktop"+"\\Z.GML");
-        System.out.println(edges.size());
-        System.out.println(nodes.size());
-    }
+//    public static void main(String[] args) throws IOException {
+//        String path = "D:\\data\\ml\\00ceaa5f8f9be7a9ce5ffe96b5b6fb2e7e73ad87c2f023db9fa399c40ac59b62.zip.gml";
+//        FilterGml f = new FilterGml(path);
+//        f.readGraph();
+//        List<Node> nodes = f.nodes;
+//        List<Edge> edges = f.edges;
+//        System.out.println(edges.size());
+//        System.out.println(nodes.size());
+//        List<Node> tmpNode = new ArrayList<>();
+//        tmpNode.addAll(nodes);
+//        for(int i = 0;i<tmpNode.size();i++){
+//            Node node = tmpNode.get(i);
+//            String lable = node.getLabel();
+//            String[] tmps =lable.split("->");
+//            if(!tmps[0].contains("Ljava")&&!tmps[0].contains("Landroid")){
+//                f.removeNode(node);
+//            }
+//        }
+//        f.writeGraph("C:\\Users\\BLG\\Desktop"+"\\Z.GML");
+//        System.out.println(edges.size());
+//        System.out.println(nodes.size());
+//    }
 }
