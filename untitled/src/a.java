@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 /**
- * 阿里笔试题
  * 将A插入B中，在新的数组中a[i]的下表必须小于a[i+1]
  * 然后新数组，两两相乘，取得最小结果
  * **/
